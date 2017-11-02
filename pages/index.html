@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<body>
+	<div id="app">
+		<h2> The main process value </h2> <p> {{ infos.foo }} </p>
+		<a href="#" @click.prevent="incrementmain">Add1 to main</a>
+		<br><br><br><br>
+		<h2> The render process value </h2> <p> {{ normal.foo }} </p>
+		<a href="#" @click.prevent="incrementrender">Add1 to render</a>
+	</div>
+	<script type="text/javascript">
+
+		let { remote } = require('electron');
+		let currentWindow = remote.getCurrentWindow();
+		//main process object
+		let infos = currentWindow.infos;
+		//render process objet
+		let normal = {foo : 0};
+
+		//Just the call to vuejs
+		let vue = new Vue({
+			el: '#app',
+			data: { 
+				infos : infos,
+				normal : normal
+			},
+			methods :
+			{
+				incrementmain : () => {infos.foo++;},
+				incrementrender : () => {normal.foo++;}
+			}
+		});
+	</script>
+</body>
+</html>
